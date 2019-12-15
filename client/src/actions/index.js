@@ -20,7 +20,7 @@ export const submitSurvey = (values, history) => async dispatch => {
 };
 
 export const fetchSurveys = () => async dispatch => {
-   const response = await axios.get('/api/surveys');
+   const response = await axios.get("/api/surveys");
 
    dispatch({ type: FETCH_SURVEYS, payload: response.data });
 };

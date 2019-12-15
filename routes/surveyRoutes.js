@@ -1,19 +1,21 @@
-    const mongoose = require('mongoose');
-    const _ = require('lodash');
-    const Path = require('path-parser').default;
-    const { URL } = require('url');
-    const requireLogin = require('../middlewares/requireLogin');
-    const requireCredits = require('../middlewares/requireCredits');
-    const Mailer = require('../services/Mailer');
-    const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
-    const Survey = mongoose.model('surveys');
+const _ = require('lodash');
+const Path = require('path-parser');
+const { URL } = require('url');
+const mongoose = require('mongoose');
+const requireLogin = require('../middlewares/requireLogin');
+const requireCredits = require('../middlewares/requireCredits');
+const Mailer = require('../services/Mailer');
+const surveyTemplate = require('../services/emailTemplates/surveyTemplate');
+
+const Survey = mongoose.model('surveys');
 
     module.exports = app => {
         app.get('/api/surveys', requireLogin, async(request, response)=>{
             const surveys = await Survey.find({ _user: request.user.id }).select({
                  recipients: false 
                 });
-            
+            console.log("This is the survey");
+            console.log(surveys);
             response.send(surveys);
         });
 
@@ -22,7 +24,6 @@
         });
 
         app.post('/api/surveys/webhooks',(request, response) => {
-            //console.log(request.body);
             const parser = new Path('/api/surveys/:surveyId/:choice');
 
             _.chain(request.body)
